@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -14,6 +15,7 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
     public static final String TAG = WeatherActivity.class.getSimpleName();
+    public ArrayList<Weather> mWeather = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +40,15 @@ public class WeatherActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String jsonData = response.body().string();
-                    Log.v(TAG, jsonData);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //try {
+                    //String jsonData = response.body().string();
+                    if(response.isSuccessful()) {
+                        mWeather = openWeatherService.processResults(response);
+                        Log.d(TAG, mWeather.toString());
+                    }
+               //} catch (IOException e) {
+               //     e.printStackTrace();
+               // }
             }
         });
     }
